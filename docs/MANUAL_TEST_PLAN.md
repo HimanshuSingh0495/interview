@@ -13,7 +13,7 @@ Status codes and messages below were checked against a running build of this cod
 ### 1.1 Start from a clean database
 
 ```bash
-cd ~/Developer/upstart-interview
+git clone https://github.com/HimanshuSingh0495/interview.git && cd interview
 lsof -ti tcp:8081 -sTCP:LISTEN | xargs kill     # stop any running instance (ignore "usage" output if none)
 rm -rf data                                     # reset DB; Flyway recreates the schema on start
 mvn spring-boot:run                             # terminal 1: app on http://localhost:8081, SQL is logged here
