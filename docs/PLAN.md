@@ -32,7 +32,7 @@ Status: **draft for review**. Nothing is implemented yet.
    - `GET /polls/{id}` and `PUT /polls/{id}` are **creator only** (403 otherwise).
 6. **Status.** The `status` column exists (`OPEN`/`CLOSED`, default `OPEN`) and voting on a `CLOSED` poll returns 409. There is **no endpoint to close a poll** because it isn't in the requirements.
 7. **Table names.** `users` (because `USER` is reserved in H2) and `poll_option` (instead of `option`).
-8. **UI stack.** Server-served HTML pages (Thymeleaf shells) with vanilla JS calling the JSON API. The token is kept in `localStorage`. There's no React or build step, and Chart.js loads from a CDN.
+8. **UI stack.** Server-served HTML pages (Thymeleaf shells) with vanilla JS calling the JSON API. The token is kept in `localStorage`. There's no React or build step, and Chart.js is bundled locally (`static/vendor/`), so it works offline.
 9. **Playwright.** Playwright for Java runs inside `mvn` against the app started on a random port, so there's one toolchain. These tests are tagged `e2e` and **excluded from plain `mvn test`** because the first run downloads browsers. Run them with `mvn test -Pe2e`.
 10. **Git.** No commits. Everything is left uncommitted for you to review in IntelliJ.
 

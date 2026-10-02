@@ -147,6 +147,8 @@ Token cleared and the nav is back to logged out. (test: `AuthE2eTest`)
 - **Options with votes can't be deleted.** Removing such an option returns 409, and a foreign key from `vote` also blocks the delete at the database level.
 - **Audit trail.** Every action (register, create, edit, vote, change vote) is appended to `audit_event` in the same transaction.
 
+**Manual test plan:** [`docs/MANUAL_TEST_PLAN.md`](docs/MANUAL_TEST_PLAN.md) has 62 cases with curl and SQL checks. Concurrency check: `./scripts/vote-storm.sh http://localhost:8081 30` fires parallel votes and prints PASS/FAIL.
+
 Design: [`docs/PLAN.md`](docs/PLAN.md). Implementation contract: [`docs/CONTRACT.md`](docs/CONTRACT.md).
 
 ## Database
