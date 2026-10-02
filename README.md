@@ -13,9 +13,9 @@ Stack: Java 17 · Spring Boot 3.5 · Spring Security (bearer token + BCrypt) · 
 | Poll owner (has a sample poll with votes) | `demo` | `demo12345` |
 | Friend / voter | `friend` | `friend12345` |
 
-Sample poll: https://interview-poll-app.onrender.com/p/2ydaSputvP. You can also register a new account.
+Log in as `demo` and open the sample poll from **My polls**, or register a new account.
 
-> Free hosting: the first load after it has been idle takes 30-60 s while the server wakes up. The demo database resets when the app is redeployed.
+> Free hosting: the first load after it has been idle takes 30-60 s while the server wakes up. The free host wipes the database when it sleeps or redeploys. The demo accounts and sample poll are recreated automatically on every start (`DemoDataSeeder`), but polls you create yourself are not kept.
 
 ## Run it
 

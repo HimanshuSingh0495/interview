@@ -10,8 +10,10 @@ RUN mvn -B -q -DskipTests package
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/app-0.0.1-SNAPSHOT.jar app.jar
-# Public deployment: no H2 web console; DB lives inside the container (resets on redeploy)
+# Public deployment: no H2 web console. The DB lives inside the container and is wiped when the free host sleeps,
+# so APP_DEMO_SEED recreates the demo accounts + sample poll on every start.
 ENV SPRING_H2_CONSOLE_ENABLED=false \
+    APP_DEMO_SEED=true \
     LOGGING_LEVEL_ORG_HIBERNATE_SQL=info \
     JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75"
 EXPOSE 8081
