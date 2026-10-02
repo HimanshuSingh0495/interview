@@ -1,0 +1,21 @@
+# Build output
+target/
+
+# Local H2 database files (created at runtime)
+data/
+*.mv.db
+*.trace.db
+
+# Local secrets / overrides
+.env
+*.local.properties
+application-local.properties
+
+# App log when started in the background
+app.log
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store

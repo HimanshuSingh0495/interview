@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Poll')}"></head>
+<body class="page-poll">
+<header th:replace="~{fragments/layout :: nav}"></header>
+<main id="main" class="shell" th:data-share-id="${shareId}">
+    <p class="loading" id="poll-loading" role="status" aria-live="polite">Loading poll&hellip;</p>
+    <div class="alert alert--error" id="poll-error" role="alert" hidden></div>
+
+    <article class="poll" id="poll" hidden aria-labelledby="poll-question">
+        <header class="poll-head">
+            <p class="poll-head__meta">
+                <span id="poll-creator"></span>
+                <span class="badge badge--closed" id="status-badge" data-testid="status-badge" hidden>Closed</span>
+            </p>
+            <h1 class="poll-head__question" id="poll-question" data-testid="poll-question"></h1>
+            <div class="poll-head__actions">
+                <button type="button" class="btn btn--secondary btn--small" data-testid="copy-link-btn">Copy link</button>
+                <button type="button" class="btn btn--secondary btn--small" data-testid="share-btn">Share</button>
+                <a href="#" class="btn btn--quiet btn--small" data-testid="edit-poll-link" hidden>Edit poll</a>
+            </div>
+        </header>
+
+        <div class="poll-grid">
+            <section class="ballot" aria-labelledby="ballot-title">
+                <h2 class="section-title" id="ballot-title">Pick one</h2>
+                <form id="vote-form" novalidate>
+                    <fieldset class="choices">
+                        <legend class="sr-only">Answers</legend>
+                        <div id="choices" class="choices__list"></div>
+                    </fieldset>
+                    <div class="ballot__actions">
+                        <button type="submit" class="btn btn--primary" data-testid="vote-btn" id="vote-btn" hidden disabled>Vote</button>
+                        <a class="btn btn--primary" data-testid="login-to-vote-link" id="login-to-vote"
+                           th:href="${'/login?next=/p/' + shareId}" hidden>Log in to vote</a>
+                    </div>
+                    <p class="status-msg" data-testid="status-msg" id="status-msg" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+
+            <section class="results" aria-labelledby="results-title">
+                <div class="results__head">
+                    <h2 class="section-title" id="results-title">Results</h2>
+                    <p class="results__total" data-testid="total-votes" id="total-votes"></p>
+                </div>
+                <div class="chart-box">
+                    <canvas id="results-chart" data-testid="results-chart" role="img" aria-label="Pie chart of votes per answer"></canvas>
+                    <div class="chart-empty" id="chart-empty" hidden>
+                        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                            <circle cx="32" cy="32" r="26" fill="none" style="stroke:var(--line-strong)" stroke-width="6" stroke-dasharray="6 7"/>
+                        </svg>
+                        <p class="chart-empty__title">No votes yet</p>
+                        <p class="chart-empty__text">The chart fills in as people vote.</p>
+                    </div>
+                </div>
+                <ol class="result-list" id="result-list" aria-label="Votes per answer"></ol>
+            </section>
+        </div>
+    </article>
+</main>
+<div th:replace="~{fragments/layout :: toast}"></div>
+<script th:src="@{/vendor/chart.umd.min.js}" defer></script>
+<script th:src="@{/js/poll-view.js}" defer></script>
+</body>
+</html>

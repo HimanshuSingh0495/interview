@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create account')}"></head>
+<body class="page-auth">
+<header th:replace="~{fragments/layout :: nav}"></header>
+<main id="main" class="shell shell--narrow">
+    <section class="auth-card" aria-labelledby="auth-title">
+        <h1 id="auth-title" class="auth-card__title">Create an account</h1>
+        <p class="auth-card__lede">Pick a username your friends will recognise. You'll be logged in straight away.</p>
+
+        <form class="form" id="auth-form" data-mode="register" novalidate>
+            <div class="alert alert--error" data-testid="error-msg" role="alert" hidden></div>
+
+            <div class="field">
+                <label for="username" class="field__label">Username</label>
+                <input id="username" name="username" type="text" class="input" data-testid="username-input"
+                       autocomplete="username" autocapitalize="none" spellcheck="false" required
+                       minlength="3" pattern="[A-Za-z0-9_]{3,30}" aria-describedby="username-hint">
+                <p id="username-hint" class="field__hint">3 to 30 characters: letters, numbers or underscores.</p>
+            </div>
+
+            <div class="field">
+                <label for="password" class="field__label">Password</label>
+                <input id="password" name="password" type="password" class="input" data-testid="password-input"
+                       autocomplete="new-password" required minlength="8" aria-describedby="password-hint">
+                <p id="password-hint" class="field__hint">8 to 72 characters.</p>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block" data-testid="submit-btn">Create account</button>
+        </form>
+
+        <p class="auth-card__switch">
+            Already have an account? <a href="/login" class="link" data-testid="switch-auth-link">Log in</a>
+        </p>
+    </section>
+</main>
+<div th:replace="~{fragments/layout :: toast}"></div>
+<script th:src="@{/js/auth.js}" defer></script>
+</body>
+</html>

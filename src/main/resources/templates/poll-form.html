@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${pageTitle})}"></head>
+<body class="page-form">
+<header th:replace="~{fragments/layout :: nav}"></header>
+<main id="main" class="shell shell--medium" th:data-poll-id="${pollId}">
+    <div class="page-head">
+        <h1 class="page-head__title" id="form-title" th:text="${pageTitle}">New poll</h1>
+    </div>
+
+    <p class="loading" id="form-loading" role="status" aria-live="polite" hidden>Loading poll&hellip;</p>
+
+    <form class="form poll-form" id="poll-form" novalidate>
+        <div class="alert alert--error" data-testid="error-msg" role="alert" hidden></div>
+
+        <div class="field">
+            <label for="question" class="field__label">Question</label>
+            <textarea id="question" name="question" class="input input--question" data-testid="question-input"
+                      rows="2" maxlength="300" required aria-describedby="question-count"
+                      placeholder="Where should we eat on Friday?"></textarea>
+            <p class="field__hint field__hint--end" id="question-count" aria-live="polite">0 / 300</p>
+        </div>
+
+        <fieldset class="field options-field">
+            <legend class="field__label">Answers</legend>
+            <p class="field__hint" id="options-hint">Between 2 and 10 answers, up to 100 characters each.</p>
+            <ol class="option-list" id="option-list"></ol>
+            <button type="button" class="btn btn--secondary btn--small" data-testid="add-option-btn" id="add-option">Add answer</button>
+        </fieldset>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary" data-testid="save-btn" id="save-btn"
+                    th:text="${pollId == null ? 'Create poll' : 'Save changes'}">Create poll</button>
+            <a href="/" class="btn btn--quiet" id="cancel-link">Cancel</a>
+        </div>
+    </form>
+</main>
+<div th:replace="~{fragments/layout :: toast}"></div>
+<script th:src="@{/js/poll-form.js}" defer></script>
+</body>
+</html>

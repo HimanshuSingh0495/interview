@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Log in')}"></head>
+<body class="page-auth">
+<header th:replace="~{fragments/layout :: nav}"></header>
+<main id="main" class="shell shell--narrow">
+    <section class="auth-card" aria-labelledby="auth-title">
+        <h1 id="auth-title" class="auth-card__title">Log in</h1>
+        <p class="auth-card__lede">Log in to vote and to see the polls you've made.</p>
+
+        <form class="form" id="auth-form" data-mode="login" novalidate>
+            <div class="alert alert--error" data-testid="error-msg" role="alert" hidden></div>
+
+            <div class="field">
+                <label for="username" class="field__label">Username</label>
+                <input id="username" name="username" type="text" class="input" data-testid="username-input"
+                       autocomplete="username" autocapitalize="none" spellcheck="false" required>
+            </div>
+
+            <div class="field">
+                <label for="password" class="field__label">Password</label>
+                <input id="password" name="password" type="password" class="input" data-testid="password-input"
+                       autocomplete="current-password" required>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block" data-testid="submit-btn">Log in</button>
+        </form>
+
+        <p class="auth-card__switch">
+            New here? <a href="/register" class="link" data-testid="switch-auth-link">Create an account</a>
+        </p>
+    </section>
+</main>
+<div th:replace="~{fragments/layout :: toast}"></div>
+<script th:src="@{/js/auth.js}" defer></script>
+</body>
+</html>
