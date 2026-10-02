@@ -33,6 +33,111 @@ Try it:
 | Pie chart of votes | `/p/{shareId}` |
 | My previously created polls | `GET /api/v1/users/me/polls`, page `/` |
 
+## Tests
+
+| Suite | Command | Tests | What it proves |
+|---|---|---|---|
+| Unit (Mockito) | `mvn test` | 73 | Service rules: validation, ownership 403, edit rules, vote/change logic, token hashing |
+| Integration (MockMvc + H2) | `mvn test` | 31 | Every endpoint and status code, auth, optimistic-lock 409, audit trail order |
+| Concurrency (real HTTP) | `mvn test` | 5 of the 31 | 50 users double-posting; 200 parallel vote changes; racing edits; edit-vs-vote races; A↔B swaps without deadlock. `vote_count` always equals `COUNT(vote)` |
+| Browser (Playwright) | `mvn test -Pe2e` | 13 | The 11 user scenarios below, end to end in Chromium |
+
+Latest local run: `mvn test` gives 105 passed, 0 failed. `mvn test -Pe2e` gives 13 passed, 0 failed.
+
+## Screenshots (captured by the Playwright tests)
+
+Each image is taken by `mvn test -Pe2e` right after that scenario's assertions pass (`src/test/java/com/example/app/e2e/`).
+
+### 1. Register
+New user lands on an empty *My polls*; the username shows in the nav. (test: `AuthE2eTest`)
+
+![1. Register](docs/screenshots/01-register.png)
+
+### 2a. Create poll: form
+Dynamic answers (2–10): one added, one removed. (test: `PollFlowE2eTest`)
+
+![2a. Create poll: form](docs/screenshots/02a-create-poll-form.png)
+
+### 2b. Create poll: result
+Redirects to the share page with 0 votes and a *No votes yet* state. (test: `PollFlowE2eTest`)
+
+![2b. Create poll: result](docs/screenshots/02b-new-poll-no-votes.png)
+
+### 3. Send to friends
+*Copy link* puts `<origin>/p/{shareId}` on the clipboard and shows a toast. (test: `PollFlowE2eTest`)
+
+![3. Send to friends](docs/screenshots/03-copy-link-toast.png)
+
+### 4a. Friend opens the link
+Logged out, the friend sees the results and *Log in to vote*. (test: `PollFlowE2eTest`)
+
+![4a. Friend opens the link](docs/screenshots/04a-friend-logged-out-login-to-vote.png)
+
+### 4b. Friend votes: pie chart
+*Vote saved*, the button becomes *Change vote*, and the pie shows 1 vote (100%). (test: `PollFlowE2eTest`)
+
+![4b. Friend votes: pie chart](docs/screenshots/04b-friend-votes-pie-chart.png)
+
+### 5a. Change vote
+*Vote changed*; counts move to the new option. (test: `PollFlowE2eTest`)
+
+![5a. Change vote](docs/screenshots/05a-change-vote.png)
+
+### 5b. Vote persists
+After a reload, the friend's vote is still pre-selected. (test: `PollFlowE2eTest`)
+
+![5b. Vote persists](docs/screenshots/05b-reload-keeps-vote.png)
+
+### 6a. Owner edits
+Renames the voted answer and adds one. Remove is locked on answers that have votes. (test: `OwnerE2eTest`)
+
+![6a. Owner edits](docs/screenshots/06a-owner-edit-form.png)
+
+### 6b. Edit saved
+The renamed answer keeps its votes. (test: `OwnerE2eTest`)
+
+![6b. Edit saved](docs/screenshots/06b-owner-edit-saved.png)
+
+### 7. Concurrent edit (optimistic lock)
+A second tab saving a stale version gets 409 *Poll was changed by someone else* and a *Reload* button. (test: `OwnerE2eTest`)
+
+![7. Concurrent edit (optimistic lock)](docs/screenshots/07-stale-edit-conflict.png)
+
+### 8. My polls
+Only my polls, newest first, with vote counts and Open/Edit/Copy link. (test: `OwnerE2eTest`)
+
+![8. My polls](docs/screenshots/08-my-polls.png)
+
+### 9a. Access control: view
+A non-owner sees no Edit link. (test: `OwnerE2eTest`)
+
+![9a. Access control: view](docs/screenshots/09a-non-owner-no-edit-link.png)
+
+### 9b. Access control: edit URL
+A non-owner opening `/polls/{id}/edit` gets a 403 message and no form. (test: `OwnerE2eTest`)
+
+![9b. Access control: edit URL](docs/screenshots/09b-non-owner-edit-page-error.png)
+
+### 10a. Validation: wrong password
+Login error message. (test: `AuthE2eTest`)
+
+![10a. Validation: wrong password](docs/screenshots/10a-login-wrong-password.png)
+
+### 10b. Validation: duplicate answers
+*Cats* / *cats* rejected; nothing is created. (test: `OwnerE2eTest`)
+
+![10b. Validation: duplicate answers](docs/screenshots/10b-duplicate-options.png)
+
+### 10c. Auth guard
+A logged-out visit to `/` redirects to `/login?next=/`. (test: `AuthE2eTest`)
+
+![10c. Auth guard](docs/screenshots/10c-logged-out-redirect-to-login.png)
+
+### 11. Logout
+Token cleared and the nav is back to logged out. (test: `AuthE2eTest`)
+
+![11. Logout](docs/screenshots/11-logout.png)
+
 ## Concurrency and integrity
 
 - **No lost votes.** Vote counts change only through SQL arithmetic (`vote_count = vote_count + 1`), never by reading the value, changing it in Java and writing it back. The entity mapping also marks the column as non-updatable.
