@@ -6,7 +6,16 @@ Create a poll, share it with friends, vote and change your vote, and see the res
 
 Stack: Java 17 · Spring Boot 3.5 · Spring Security (bearer token + BCrypt) · Spring Data JPA · Flyway · H2 · Thymeleaf shells with vanilla JS · Chart.js · JUnit 5, MockMvc and Playwright.
 
-**Live demo:** _link added after the first deploy_ · [Deploy your own on Render](https://render.com/deploy?repo=https://github.com/HimanshuSingh0495/interview)
+## Live demo: https://interview-poll-app.onrender.com
+
+| Account | Username | Password |
+|---|---|---|
+| Poll owner (has a sample poll with votes) | `demo` | `demo12345` |
+| Friend / voter | `friend` | `friend12345` |
+
+Sample poll: https://interview-poll-app.onrender.com/p/2ydaSputvP. You can also register a new account.
+
+> Free hosting: the first load after it has been idle takes 30-60 s while the server wakes up. The demo database resets when the app is redeployed.
 
 ## Run it
 
